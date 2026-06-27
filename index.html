@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ayphie AI — Waitlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:      #1A73E8;
+    --blue-dark: #0F52BA;
+    --orange:    #F97316;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* Hide scrollbar — all browsers */
+  ::-webkit-scrollbar { display: none; }
+  * { -ms-overflow-style: none; scrollbar-width: none; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #050B1A;
+    color: #F0F4FF;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ── PAGE LOAD ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.94) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .anim-header   { animation: slideDown 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+  .anim-eyebrow  { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
+  .anim-title    { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+  .anim-subtitle { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.40s both; }
+  .anim-card     { animation: scaleIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.52s both; }
+  .anim-features { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.72s both; }
+  .anim-footer   { animation: fadeIn 0.5s ease 0.9s both; }
+  .anim-count    { animation: countUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.85s both; }
+
+  /* ── 3D GRADIENT SCENE ── */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .bg-canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% -10%, #0D2B6B 0%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 80% 110%, #0A1F52 0%, transparent 55%),
+      radial-gradient(ellipse 40% 35% at 10% 80%, #1A0A3B 0%, transparent 50%),
+      linear-gradient(175deg, #06102A 0%, #050B1A 55%, #080614 100%);
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(72px);
+    opacity: 0.55;
+  }
+  .orb-1 {
+    width: 680px; height: 680px;
+    top: -220px; left: -180px;
+    background: radial-gradient(circle, #1A73E8 0%, #0F52BA 40%, transparent 70%);
+    animation: drift1 18s ease-in-out infinite alternate;
+  }
+  .orb-2 {
+    width: 560px; height: 560px;
+    top: -100px; right: -200px;
+    background: radial-gradient(circle, #4F46E5 0%, #2D1FA8 50%, transparent 70%);
+    animation: drift2 22s ease-in-out infinite alternate;
+    opacity: 0.4;
+  }
+  .orb-3 {
+    width: 420px; height: 420px;
+    bottom: 80px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, #F97316 0%, #C2410C 45%, transparent 70%);
+    opacity: 0.22;
+    animation: drift3 15s ease-in-out infinite alternate;
+  }
+  .orb-4 {
+    width: 300px; height: 300px;
+    bottom: -60px; right: 10%;
+    background: radial-gradient(circle, #1A73E8 0%, transparent 70%);
+    opacity: 0.3;
+  }
+
+  @keyframes drift1 {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(60px, 40px) scale(1.08); }
+  }
+  @keyframes drift2 {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(-50px, 60px) scale(1.05); }
+  }
+  @keyframes drift3 {
+    0%   { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(calc(-50% + 40px)) scale(1.1); }
+  }
+
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .bg-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    opacity: 0.6;
+  }
+
+  header, main, footer { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 11, 26, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #F0F4FF;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-text span { color: #60A5FA; }
+
+  /* ── HEADER COUNTER PILL ── */
+  .header-count-pill {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(26,115,232,0.13);
+    border: 1px solid rgba(96,165,250,0.22);
+    border-radius: 100px;
+    padding: 6px 16px 6px 10px;
+  }
+
+  .hcp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #60A5FA;
+    animation: hcpulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes hcpulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.5); opacity: 1; }
+    50%       { box-shadow: 0 0 0 5px rgba(96,165,250,0); opacity: 0.7; }
+  }
+
+  .hcp-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #93C5FD;
+    line-height: 1;
+  }
+
+  .hcp-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(147,197,253,0.65);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(249, 115, 22, 0.12);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    color: #FB923C;
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FB923C;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: #F0F4FF;
+    max-width: 680px;
+    margin-bottom: 12px;
+  }
+
+  .hero-title .accent {
+    background: linear-gradient(90deg, #60A5FA, #818CF8, #60A5FA);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .ember-label {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(15px, 2.2vw, 20px);
+    font-weight: 400;
+    color: rgba(240, 244, 255, 0.45);
+    letter-spacing: -0.3px;
+    margin-bottom: 48px;
+  }
+
+  .ember-label strong {
+    font-weight: 600;
+    color: rgba(240, 244, 255, 0.75);
+  }
+
+  /* ── WAITLIST CARD ── */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: var(--radius-lg);
+    padding: 36px 36px 32px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04) inset,
+      0 24px 80px rgba(0,0,0,0.5),
+      0 8px 24px rgba(0,0,0,0.3),
+      0 2px 6px rgba(26,115,232,0.12);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  /* ── COUNTER INSIDE CARD ── */
+  .card-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .counter-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #60A5FA 0%, #818CF8 60%, #93C5FD 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -2px;
+  }
+
+  .counter-sublabel {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(147,197,253,0.55);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(240,244,255,0.55);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .input-row .email-input {
+    min-width: 0;
+    flex: 1 1 200px;
+  }
+
+  .input-row .submit-btn {
+    flex: 1 1 auto;
+  }
+
+  .email-input {
+    flex: 1;
+    height: 48px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm);
+    padding: 0 16px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #F0F4FF;
+    background: rgba(255,255,255,0.06);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .email-input::placeholder { color: rgba(240,244,255,0.28); }
+
+  .email-input:focus {
+    border-color: rgba(96,165,250,0.55);
+    background: rgba(255,255,255,0.09);
+  }
+
+  .email-input.error { border-color: #EF4444; }
+
+  .submit-btn {
+    height: 48px;
+    padding: 0 22px;
+    background: linear-gradient(135deg, #1A73E8, #4F46E5);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(26,115,232,0.4);
+  }
+
+  .submit-btn:hover { opacity: 0.88; box-shadow: 0 6px 28px rgba(26,115,232,0.55); }
+  .submit-btn:active { transform: scale(0.97); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── STATUS MESSAGES ── */
+  .status-msg {
+    display: none;
+    margin-top: 14px;
+    border-radius: var(--radius-sm);
+    padding: 13px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .status-msg.success {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #6EE7B7;
+  }
+  .status-msg.already {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(26,115,232,0.1);
+    border: 1px solid rgba(96,165,250,0.25);
+    color: #93C5FD;
+  }
+  .status-msg.error-msg {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    color: #FCA5A5;
+  }
+
+  .status-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .status-msg strong { display: block; font-weight: 600; margin-bottom: 2px; }
+
+  /* ── FEATURES ── */
+  .features {
+    max-width: 1080px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .feature-chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    backdrop-filter: blur(12px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .feature-chip:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.13);
+  }
+
+  .feature-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .fi-blue   { background: rgba(26,115,232,0.2); }
+  .fi-orange { background: rgba(249,115,22,0.2); }
+  .fi-grey   { background: rgba(255,255,255,0.07); }
+  .fi-dark   { background: rgba(79,70,229,0.2); }
+
+  .feature-chip h3 { font-size: 14px; font-weight: 600; color: #F0F4FF; margin-bottom: 3px; }
+  .feature-chip p  { font-size: 13px; color: rgba(240,244,255,0.42); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 22px 24px;
+  }
+
+  .footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: rgba(240,244,255,0.28);
+  }
+
+  /* ── SHEET NOTICE ── */
+  .sheet-notice {
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.22);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #FBB97A;
+    margin-bottom: 20px;
+    display: none;
+    line-height: 1.5;
+  }
+  .sheet-notice a { color: #60A5FA; }
+  .sheet-notice code {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero { padding: 56px 20px 40px; }
+    .card { padding: 26px 20px 22px; }
+    .submit-btn { height: 44px; }
+    .header-count-pill .hcp-label { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── BACKGROUND SCENE ── -->
+<div class="bg-canvas" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="anim-header">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <img src="logo.png" alt="Ayphie AI" class="logo-img" />
+      <span class="logo-text">Ayphie <span>AI</span></span>
+    </a>
+    <div class="header-count-pill">
+      <span class="hcp-dot"></span>
+      <span class="hcp-number" id="headerCount">973+</span>
+      <span class="hcp-label">on waitlist</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<main>
+  <section class="hero">
+    <div class="eyebrow anim-eyebrow">
+      <span class="eyebrow-dot"></span>
+      Now accepting early members
+    </div>
+
+    <h1 class="hero-title anim-title">
+      Let's AI drive<br><span class="accent">your Edits</span>
+    </h1>
+
+    <p class="ember-label anim-subtitle"><strong>Ember 1</strong> — our first public model, arriving soon</p>
+
+    <!-- WAITLIST CARD -->
+    <div class="card anim-card">
+
+      <div id="sheetNotice" class="sheet-notice">
+        ⚙️ <strong>Setup needed:</strong> Replace <code>YOUR_GOOGLE_SCRIPT_URL_HERE</code> with your Google Sheets Web App URL. <a href="#" onclick="document.getElementById('sheetNotice').style.display='none'; return false;">Dismiss</a>
+      </div>
+
+      <!-- Animated counter -->
+      <div class="card-counter anim-count">
+        <div class="counter-number" id="countDisplay">0</div>
+        <div class="counter-sublabel">people on the waitlist</div>
+      </div>
+
+      <label class="form-label" for="emailInput">Your Gmail address</label>
+      <div class="input-row">
+        <input
+          type="email"
+          id="emailInput"
+          class="email-input"
+          placeholder="you@gmail.com"
+          autocomplete="email"
+        />
+        <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+          Join waitlist
+        </button>
+      </div>
+
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <div class="features anim-features">
+    <div class="feature-chip">
+      <div class="feature-icon fi-blue">⚡</div>
+      <div>
+        <h3>Ember 1 model</h3>
+        <p>Purpose-built for speed and nuanced reasoning across tasks.</p>
+      </div>
+    </div>
+    <div class="feature-chip">
+      <div class="feature-icon fi-orange">🎯</div>
+      <div>
+        <h3>Precision output</h3>
+        <p>Less hallucination, more signal. Grounded responses you can trust.</p>
+      </div>
+    </div>
+    <div class="feature-chip">
+      <div class="feature-icon fi-grey">🔗</div>
+      <div>
+        <h3>Seamless integrations</h3>
+        <p>Plugs into your existing workflow in minutes, not days.</p>
+      </div>
+    </div>
+    <div class="feature-chip">
+      <div class="feature-icon fi-dark">🛡️</div>
+      <div>
+        <h3>Private by default</h3>
+        <p>Your data stays yours. No training on your conversations.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="anim-footer">
+  <div class="footer-inner">
+    <span class="footer-copy">© 2025 Ayphie AI · All rights reserved</span>
+  </div>
+</footer>
+
+<script>
+  const SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdcMClP7CVLQk4XpQMYoHoGAABgpPEN6pSKzbE7Wav5EdScDFYSWnVwA2tOiNdsK4/exec";
+
+  /*
+    GOOGLE SHEETS SETUP
+    1. Create a Google Sheet with columns: Email | Timestamp | Status
+    2. Extensions → Apps Script → paste this code:
+
+    function doPost(e) {
+      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+      var email = (e.parameter.email || "").toLowerCase().trim();
+      if (!email) return ContentService.createTextOutput("error");
+
+      var range = sheet.getDataRange().getValues();
+      for (var i = 1; i < range.length; i++) {
+        if (range[i][0].toLowerCase() === email) {
+          return ContentService.createTextOutput("exists");
+        }
+      }
+      sheet.appendRow([email, new Date().toISOString(), "pending"]);
+      return ContentService.createTextOutput("added");
+    }
+
+    3. Deploy → New deployment → Web App
+       - Execute as: Me
+       - Who has access: Anyone
+    4. Paste the Web App URL as SHEET_SCRIPT_URL above.
+
+    NOTE: Uses form-encoded POST (not JSON) to avoid CORS preflight errors in browsers.
+  */
+
+  if (SHEET_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_URL_HERE") {
+    document.getElementById("sheetNotice").style.display = "block";
+  }
+
+  const localEmails = new Set();
+  let waitlistCount = 739;
+
+  /* ── ANIMATED COUNTER ON LOAD ── */
+  function animateCounter(target, duration) {
+    var el = document.getElementById("countDisplay");
+    var start = 0;
+    var startTime = null;
+    var easeOut = function(t) { return 1 - Math.pow(1 - t, 3); };
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var current = Math.round(easeOut(progress) * target);
+      el.textContent = current.toLocaleString() + "+";
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── FETCH LIVE COUNT ON LOAD ── */
+  async function fetchLiveCount() {
+    try {
+      var res = await fetch(SHEET_SCRIPT_URL + "?action=count", { mode: "no-cors" });
+      // no-cors = opaque response, can't read it — fall back to doGet via script tag trick
+    } catch(e) {}
+  }
+
+  // Use JSONP-style script injection to get count (bypasses CORS for GET)
+  function loadLiveCount() {
+    window._ayphieCountCB = function(data) {
+      if (data && typeof data.count === "number") {
+        waitlistCount = data.count + 739;
+        syncHeaderCount();
+      }
+      setTimeout(function() { animateCounter(waitlistCount, 1400); }, 850);
+    };
+    var s = document.createElement("script");
+    s.src = SHEET_SCRIPT_URL + "?callback=_ayphieCountCB";
+    s.onerror = function() {
+      // Script failed — just animate with default count
+      setTimeout(function() { animateCounter(waitlistCount, 1400); }, 850);
+    };
+    document.head.appendChild(s);
+  }
+
+  loadLiveCount();
+
+  function syncHeaderCount() {
+    document.getElementById("headerCount").textContent = waitlistCount + "+";
+  }
+
+  function isValidGmail(email) {
+    return /^[a-zA-Z0-9._%+\-]+@gmail\.com$/.test(email.trim());
+  }
+
+  function setStatus(type, icon, title, body) {
+    var el = document.getElementById("statusMsg");
+    el.className = "status-msg " + type;
+    el.innerHTML = '<span class="status-icon">' + icon + '</span><div><strong>' + title + '</strong>' + body + '</div>';
+    el.style.display = "flex";
+  }
+
+  function clearStatus() {
+    var el = document.getElementById("statusMsg");
+    el.style.display = "none";
+    el.className = "status-msg";
+  }
+
+  function updateCount(delta) {
+    waitlistCount += delta;
+    animateCounter(waitlistCount, 600);
+    syncHeaderCount();
+  }
+
+  async function handleSubmit() {
+    var emailEl = document.getElementById("emailInput");
+    var btn     = document.getElementById("submitBtn");
+    var email   = emailEl.value.trim();
+
+    clearStatus();
+    emailEl.classList.remove("error");
+
+    if (!email) {
+      emailEl.focus();
+      emailEl.classList.add("error");
+      setStatus("error-msg", "✉️", "Email required", "Please enter your Gmail address to join the waitlist.");
+      return;
+    }
+
+    if (!isValidGmail(email)) {
+      emailEl.classList.add("error");
+      setStatus("error-msg", "⚠️", "Gmail only", "We only accept Gmail addresses (ending in @gmail.com) for early access.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Joining…";
+
+    if (SHEET_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_URL_HERE") {
+      await new Promise(r => setTimeout(r, 900));
+      if (localEmails.has(email.toLowerCase())) {
+        setStatus("already", "🔵", "You're already on the list!", "We already have your email. You'll hear from us the moment Ember 1 launches.");
+      } else {
+        localEmails.add(email.toLowerCase());
+        updateCount(1);
+        setStatus("success", "🎉", "You're in!", "Welcome to the Ayphie AI waitlist. We'll send your early-access invite to Gmail when Ember 1 is ready.");
+        emailEl.value = "";
+      }
+    } else {
+      try {
+        var formData = new FormData();
+        formData.append("email", email);
+        await fetch(SHEET_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+        if (localEmails.has(email.toLowerCase())) {
+          setStatus("already", "🔵", "You're already on the list!", "We already have your email. We'll reach out the moment Ember 1 is ready for you.");
+        } else {
+          localEmails.add(email.toLowerCase());
+          updateCount(1);
+          setStatus("success", "🎉", "You're in!", "Welcome to the Ayphie AI waitlist. We'll send your early-access invite the moment Ember 1 is ready.");
+          emailEl.value = "";
+        }
+      } catch(err) {
+        setStatus("error-msg", "⚠️", "Something went wrong", "Couldn't reach our servers. Please try again in a moment.");
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Join waitlist";
+  }
+
+  document.getElementById("emailInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") handleSubmit();
+  });
+</script>
+</body>
+</html>
